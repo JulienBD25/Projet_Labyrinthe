@@ -1,7 +1,6 @@
 #include "Sous_Programme.h"
 
 int main() {
-    int test;
     int nbAlea = 0;
     t_plateau matricePlateau[7][7] = {0};
     FILE *fp;
