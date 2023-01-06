@@ -294,6 +294,38 @@ void plateau_toutes_carte(t_plateau matricePlateau[][7], t_cartes tableauCarte[]
 
 /////////////////////////////////////////////////AFFICHAGE//////////////////////////////////////////////////////////////
 
+int comptage_carte(int *nbAlea, int *nbCarteL, int *nbCarteI, int *nbCarteT, int liste[]) {
+    while (liste[*nbAlea] == -1){
+        *nbAlea = 1 + rand() % 11;
+    }
+
+    if ((liste[*nbAlea] <= 5) && (liste[*nbAlea] >= 2) && (*nbCarteL < 16)){
+        *nbCarteL += 1;
+    }
+    if ((liste[*nbAlea] <= 5) && (liste[*nbAlea] >= 2) && (*nbCarteL == 16)){
+        for (int i=2; i<6; i++){
+            liste[i] = -1;
+        }
+    }
+    if (((liste[*nbAlea] == 0) || (liste[*nbAlea] == 1)) && (*nbCarteI < 12)){
+        *nbCarteI += 1;
+    }
+    if (((liste[*nbAlea] == 0) || (liste[*nbAlea] == 1)) && (*nbCarteI == 12)){
+        liste[0] = -1;
+        liste[1] = -1;
+        liste[2] = -1;
+        liste[3] = -1;
+    }
+    if ((liste[*nbAlea] <= 9) && (liste[*nbAlea] >= 6) && (*nbCarteT < 6)){
+        *nbCarteT += 1;
+    }
+    if ((liste[*nbAlea] <= 9) && (liste[*nbAlea] >= 6) && (*nbCarteT == 6)){
+        for (int i=6; i<10; i++){
+            liste[i] = -1;
+        }
+    }
+}
+
 void mise_en_forme(){
     int positionEnX = 0, positionEnY = 2;
     int positionEnXTexte = 7, positionEnYTexte = 1;
@@ -374,15 +406,47 @@ void affichage_matrice(t_plateau matricePlateau[7][7]){
 
 int decalage(t_plateau matricePlateau[][7], int matriceCarteEnRab[][3]){
     int matriceCarteEnRabTempo[3][3] = {0};
-    matriceCarteEnRabTempo[1][2] = 1;
-    matriceCarteEnRabTempo[2][1] = 1;
-    matriceCarteEnRabTempo[0][1] = 1;
-    matriceCarteEnRabTempo[1][0] = 1;
     char lettreRentree;
     int nombreRentree;
     set_color(WHITE, BLACK);
     printf("\nRentrez une colonne et une ligne ou vous souhaitez rentré votre carte :\n");
     scanf("%c %d", &lettreRentree, &nombreRentree);
+    while (((lettreRentree > 96) && (lettreRentree < 103)) || ((lettreRentree < 65) || (lettreRentree > 71)) ||
+           ((nombreRentree < 1) || (nombreRentree > 7)) || (((lettreRentree %2 == 0) && ((lettreRentree >= 65) &&
+           (lettreRentree <= 71))) && ((nombreRentree >= 2) && (nombreRentree <= 6))) || (((lettreRentree %2 == 1) &&
+           ((lettreRentree >= 65) && (lettreRentree <= 71))) && (nombreRentree % 2 == 1) && ((1 <= nombreRentree) &&
+           (nombreRentree <= 7)))){
+
+        ///transforme minuscule en majuscule
+        if ((lettreRentree > 96) && (lettreRentree < 103)) {
+            lettreRentree -= 32;
+        }
+
+        ///si la case choisie est fixe
+        if (((lettreRentree %2 == 1) && ((lettreRentree >= 65) && (lettreRentree <= 71))) && (nombreRentree % 2 == 1)
+            && ((1 <= nombreRentree) && (nombreRentree <= 7))) {
+            printf("Non cette case est fixe et ne peut etre bouge, entrer une lettre et un nombre valable :\n");
+        }
+
+        ///si la case choisie est à l'intérieur du labyrinthe
+        if (((lettreRentree %2 == 0) && ((lettreRentree >= 65) && (lettreRentree <= 71))) && ((nombreRentree >= 2) &&
+                                                                                              (nombreRentree <= 6))) {
+            printf("Cette case est dans le labyrinthe, entrer une lettre et un nombre valable :\n");
+        }
+
+        if (((lettreRentree < 65) || (lettreRentree > 71)) && ((1 <= nombreRentree) && (nombreRentree <= 7))) {
+            printf("Entrez une lettre entre A et G avant votre chiffre :\n");
+        }
+        if (((lettreRentree >= 65) && (lettreRentree <= 71)) && ((nombreRentree < 1) || (nombreRentree > 7))) {
+            printf("Entrer un nombre entre 0 et 7 apres votre lettre. Veuillez reessayer :\n");
+        }
+        if (((lettreRentree < 65) || (lettreRentree > 71)) && ((nombreRentree < 1) || (nombreRentree > 7))){
+            printf("La combinaison ne correspond à aucune case du tableau. Veuillez reessayer :\n");
+        }
+
+        printf("Reessayez :\n");
+        scanf("\n%c%d", &lettreRentree, &nombreRentree);
+    }
     lettreRentree -= 65;
     nombreRentree -= 1;
     ///décalage gauche vers droite
@@ -409,9 +473,6 @@ int decalage(t_plateau matricePlateau[][7], int matriceCarteEnRab[][3]){
                 matricePlateau[nombreRentree][0].matrice[j][k] = matriceCarteEnRabTempo[j][k];
             }
         }
-        system("cls");
-        mise_en_forme();
-        affichage_matrice(matricePlateau);
     }
 
         ///décalage droite vers gauche
@@ -438,9 +499,6 @@ int decalage(t_plateau matricePlateau[][7], int matriceCarteEnRab[][3]){
                 matricePlateau[nombreRentree][6].matrice[j][k] = matriceCarteEnRabTempo[j][k];
             }
         }
-        system("cls");
-        mise_en_forme();
-        affichage_matrice(matricePlateau);
     }
 
         ///décalage haut vers bas
@@ -467,9 +525,6 @@ int decalage(t_plateau matricePlateau[][7], int matriceCarteEnRab[][3]){
                 matricePlateau[0][lettreRentree].matrice[j][k] = matriceCarteEnRabTempo[j][k];
             }
         }
-        system("cls");
-        mise_en_forme();
-        affichage_matrice(matricePlateau);
     }
 
         ///décalage haut vers bas
@@ -496,10 +551,10 @@ int decalage(t_plateau matricePlateau[][7], int matriceCarteEnRab[][3]){
                 matricePlateau[6][lettreRentree].matrice[j][k] = matriceCarteEnRabTempo[j][k];
             }
         }
-        system("cls");
-        mise_en_forme();
-        affichage_matrice(matricePlateau);
     }
+    system("cls");
+    mise_en_forme();
+    affichage_matrice(matricePlateau);
 }
 
 ////////////////////////////////////////////////ENREGISTREMENT MATRICE//////////////////////////////////////////////////
@@ -539,7 +594,41 @@ void lecture_matrice_fichier(FILE *fp, t_plateau matricePlateau[7][7]){
     }
 }
 
-void menu(t_plateau matricePlateau[][7], t_cartes tableauCarte[], FILE *fp, int nbAlea, int nbCarteT, int nbCarteI, int nbCarteL, t_joueurs TousLesJoueurs[], int *nbJoueur){
+///////////////////////////////////////////////ENREGISTREMENT DONNEE JOUEURS////////////////////////////////////////////
+void enregistrement_joueur(t_joueurs TousLesJoueurs[], FILE *fichier, int nbJoueurs){
+    fichier = fopen("sauv_joeuur.txt", "w");
+    if (fichier != NULL){
+        for (int i = 0; i<nbJoueurs; i++) {
+            fprintf(fichier, "%s ", TousLesJoueurs[i].prenom);
+            fprintf(fichier, "%d ", TousLesJoueurs[i].xcoord);
+            fprintf(fichier, "%d ", TousLesJoueurs[i].ycoord);
+            for (int j = 0; j<(24/nbJoueurs); j++) {
+                fprintf(fichier, "%s", TousLesJoueurs[i].carteTresorsaChercher);
+            }
+        }
+        fclose(fichier);
+    }
+    else{
+        printf("erreur");
+        exit(1);
+    }
+}
+
+void lecture_joueur(t_joueurs TousLesJoueurs[], FILE *fichier, int nbJoueurs){
+    fichier = fopen("sauv_joeuur.txt", "r");
+    if (fichier != NULL) {
+        for (int i = 0; i < nbJoueurs; i++) {
+            fscanf(fichier, "%s ", TousLesJoueurs[i].prenom);
+            fscanf(fichier, "%d ", &TousLesJoueurs[i].xcoord);
+            fscanf(fichier, "%d ", &TousLesJoueurs[i].ycoord);
+            for (int j = 0; j < (24 / nbJoueurs); j++) {
+                fscanf(fichier, "%s", TousLesJoueurs[i].carteTresorsaChercher);
+            }
+        }
+    }
+}
+
+void menu(t_plateau matricePlateau[][7], t_plateau tableauCarte[], FILE *fp, int nbAlea, int nbCarteT, int nbCarteI, int nbCarteL, t_joueurs TousLesJoueurs[], int *nbJoueur, int matriceCarteEnRab[][3]){
     int choixMenu = 0;
     for (int i = 0; i < 7; i += 6) {
         for (int j = 0; j < 7; j += 6) {
@@ -557,43 +646,18 @@ void menu(t_plateau matricePlateau[][7], t_cartes tableauCarte[], FILE *fp, int 
         case 1:
             plateau_cartes_fixes(matricePlateau, tableauCarte);
             plateau_toutes_carte(matricePlateau, tableauCarte, &nbAlea, &nbCarteT, &nbCarteL, &nbCarteI);
-            jeu_nouvelle_partie(TousLesJoueurs,matricePlateau, nbJoueur, fp);
+            jeu_nouvelle_partie(TousLesJoueurs,matricePlateau, nbJoueur, fp, matriceCarteEnRab);
             break;
         case 2:
             lecture_matrice_fichier(fp, matricePlateau);
-            affichage_matrice(matricePlateau);
             break;
         case 3:
+            system("cls");
             printf("A bientot !");
             break;
     }
 }
 
-int comptage_carte(int *nbAlea, int *nbCarteL, int *nbCarteI, int *nbCarteT, int liste[]) {
-    if ((liste[*nbAlea] <= 5) && (liste[*nbAlea] >= 2) && (*nbCarteL < 16)){
-        *nbCarteL += 1;
-    }
-    if (*nbCarteL == 16){
-        for (int i=2; i<6; i++){
-            liste[i] = -1;
-        }
-    }
-    if (((liste[*nbAlea] == 0) || (liste[*nbAlea] == 1)) && (*nbCarteI < 12)){
-        *nbCarteI += 1;
-    }
-    if (*nbCarteI == 12){
-        liste[0] = -1;
-        liste[1] = -1;
-    }
-    if ((liste[*nbAlea] <= 9) && (liste[*nbAlea] >= 6) && (*nbCarteT < 6)){
-        *nbCarteT += 1;
-    }
-    if (*nbCarteT == 6){
-        for (int i=6; i<10; i++){
-            liste[i] = -1;
-        }
-    }
-}
 
 void jeu_nouvelle_partie(t_joueurs TousLesJoueurs[], t_plateau matricePlateau[][7], int *nbJoueur, FILE *fp){
     int matriceCarteEnRab[3][3] = {0};
