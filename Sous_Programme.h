@@ -99,7 +99,7 @@ void lecture_matrice_fichier(FILE *fp, t_plateau matricePlateau[7][7]);
 
 
 int comptage_carte(int *nbAlea, int *nbCarteL, int *nbCarteI, int *nbCarteT, int liste[]);
-void menu(t_plateau matricePlateau[][7], t_cartes tableauCarte[], FILE *fp, int nbAlea, int nbCarteT, int nbCarteI, int nbCarteL, t_joueurs TousLesJoueurs[], int *nbJoueurs);
+void menu(t_plateau matricePlateau[][7], t_plateau tableauCarte[], FILE *fp, int nbAlea, int nbCarteT, int nbCarteI, int nbCarteL, t_joueurs TousLesJoueurs[], int *nbJoueur, int matriceCarteEnRab[][3]);
 void jeu_nouvelle_partie(t_joueurs TousLesJoueurs[], t_plateau matricePlateau[][7], int *nbJoueur, FILE *fp);
 
 #endif //PROJET_ALGORITHMIQUE_LABYRINTHE_SOUS_PROGRAMME_H
