@@ -1,0 +1,60 @@
+{
+	"configurations" : 
+	[
+		{
+			"directories" : 
+			[
+				{
+					"build" : ".",
+					"jsonFile" : "directory-.-Debug-d0094a50bb2071803777.json",
+					"minimumCMakeVersion" : 
+					{
+						"string" : "3.24"
+					},
+					"projectIndex" : 0,
+					"source" : ".",
+					"targetIndexes" : 
+					[
+						0
+					]
+				}
+			],
+			"name" : "Debug",
+			"projects" : 
+			[
+				{
+					"directoryIndexes" : 
+					[
+						0
+					],
+					"name" : "Projet_Labyrinthe_Test",
+					"targetIndexes" : 
+					[
+						0
+					]
+				}
+			],
+			"targets" : 
+			[
+				{
+					"directoryIndex" : 0,
+					"id" : "Projet_Labyrinthe_Test::@6890427a1f51a3e7e1df",
+					"jsonFile" : "target-Projet_Labyrinthe_Test-Debug-93f11aa3afd38149bac6.json",
+					"name" : "Projet_Labyrinthe_Test",
+					"projectIndex" : 0
+				}
+			]
+		}
+	],
+	"kind" : "codemodel",
+	"paths" : 
+	{
+		"build" : "D:/Julien/Document/Programmation/GitHub/Projet_Labyrinthe_Test/Projet_Labyrinthe_Test/cmake-build-debug",
+		"source" : "D:/Julien/Document/Programmation/GitHub/Projet_Labyrinthe_Test/Projet_Labyrinthe_Test"
+	},
+	"version" : 
+	{
+		"major" : 2,
+		"minor" : 4
+	}
+}
