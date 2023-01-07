@@ -259,7 +259,7 @@ void plateau_cartes_fixes(t_plateau matricePlateau[7][7], t_plateau tableauCarte
 }
 
 
-void plateau_toutes_carte(t_plateau matricePlateau[][7], t_plateau tableauCarte[]){
+void plateau_toutes_carte(t_plateau matricePlateau[][7], t_plateau tableauCarte[],int matriceCarteEnRab[][3]){
     srand(time(NULL));
     int nbCarteL = 0, nbCarteT = 0, nbCarteI = 0;
     int nbAlea = 0;
@@ -288,6 +288,28 @@ void plateau_toutes_carte(t_plateau matricePlateau[][7], t_plateau tableauCarte[
                 for (int l = 0; l < 3; l++) {
                     matricePlateau[i][j].matrice[k][l] = tableauCarte[nbAlea].matrice[k][l];
                 }
+            }
+        }
+    }
+
+    if(nbCarteL < 16){
+        for (int j = 0; j < 3; j++) {
+            for (int k = 0; k < 3; k++) {
+                tableauCarte[2].matrice[j][k] = matriceCarteEnRab[j][k];
+            }
+        }
+    }
+    if(nbCarteI < 12){
+        for (int j = 0; j < 3; j++) {
+            for (int k = 0; k < 3; k++) {
+                tableauCarte[0].matrice[j][k] = matriceCarteEnRab[j][k];
+            }
+        }
+    }
+    if(nbCarteT < 6){
+        for (int j = 0; j < 3; j++) {
+            for (int k = 0; k < 3; k++) {
+                tableauCarte[6].matrice[j][k] = matriceCarteEnRab[j][k];
             }
         }
     }

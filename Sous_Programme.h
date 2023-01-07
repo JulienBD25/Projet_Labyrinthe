@@ -45,7 +45,7 @@ typedef struct t_joueurs{
 
 //sous programmes plateau
 void plateau_cartes_fixes(t_plateau matricePlateau[7][7], t_plateau tableauCarte[10]);
-void plateau_toutes_carte(t_plateau matricePlateau[][7], t_plateau tableauCarte[]);
+void plateau_toutes_carte(t_plateau matricePlateau[][7], t_plateau tableauCarte[],int matriceCarteEnRab[][3]);
 int decalage(t_plateau matricePlateau[][7],int matriceCarteEnRab[][3]);
 
 
