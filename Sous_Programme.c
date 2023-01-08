@@ -259,89 +259,94 @@ void plateau_cartes_fixes(t_plateau matricePlateau[7][7], t_plateau tableauCarte
 }
 
 
-void plateau_toutes_carte(t_plateau matricePlateau[][7], t_plateau tableauCarte[],int matriceCarteEnRab[][3]){
+void plateau_toutes_carte(t_plateau matricePlateau[][7], t_plateau tableauCarte[],int matriceCarteEnRab[3][3]){
+    // initialisation du générateur de nombres aléatoires
     srand(time(NULL));
-    int nbCarteL = 0, nbCarteT = 0, nbCarteI = 0;
-    int nbAlea = 0;
-    int liste[10] = {0,1,2,3,4,5,6,7,8,9};
+    // déclaration des trois listes et de leur nouvelle liste
+    int liste1[SIZE1];
+    int liste2[SIZE2];
+    int liste3[SIZE3];
+    int new_liste[NEW_SIZE];
+
+    // remplissage de la première liste avec des nombres aléatoires compris entre 0 et 1
+    for (int i = 0; i < SIZE1; i++) {
+        liste1[i] = rand() % 2;
+    }
+
+    // remplissage de la deuxième liste avec des nombres aléatoires compris entre 2 et 5
+    for (int i = 0; i < 16; i++) {
+        liste2[i] = (rand() % 4) + 2;
+    }
+    // remplissage de la troisième liste avec des nombres aléatoires compris entre 6 et 9
+    for (int i = 0; i < 6; i++) {
+        liste3[i] = (rand() % 4) + 6;
+    }
+
+    // regroupement des trois listes dans la nouvelle liste de manière aléatoire
+    for (int i = 0; i < NEW_SIZE; i++) {
+        if (i < SIZE1) {
+            new_liste[i] = liste1[i];
+        } else if (i < SIZE1 + SIZE2) {
+            new_liste[i] = liste2[i - SIZE1];
+        } else {
+            new_liste[i] = liste3[i - SIZE1 - SIZE2];
+        }
+    }
+
+    // mélange aléatoire des éléments de la nouvelle liste
+    for (int i = 0; i < NEW_SIZE; i++) {
+        int j = rand() % NEW_SIZE;
+        int temp = new_liste[i];
+        new_liste[i] = new_liste[j];
+        new_liste[j] = temp;
+    }
+
+    // déclaration des deux nouvelles listes
+    int liste_12[12];
+    int liste_22[22];
+
+    // séparation de la nouvelle liste en deux listes de tailles différentes
+    for (int i = 0; i < 12; i++) {
+        liste_12[i] = new_liste[i];
+    }
+    for (int i = 0; i < 22; i++) {
+        liste_22[i] = new_liste[i + 12];
+    }
+
+    int numMatriceEnRab = 0;
+    numMatriceEnRab = new_liste[33];
+
+    for (int k = 0; k < 3; k++) {
+        for (int l = 0; l < 3; l++) {
+            matriceCarteEnRab[k][l] = tableauCarte[numMatriceEnRab].matrice[k][l];
+        }
+    }
+    int m = 0;
+    int n = 0;
+
     for (int i = 0; i < 7; i += 2) {
         for (int j = 1; j < 7; j += 2) {
-            do {
-                nbAlea = rand() % 10;
-            } while (liste[nbAlea] == -1);
-            comptage_carte(nbAlea, &nbCarteL, &nbCarteI, &nbCarteT, liste);
-            for (int k = 0; k < 3; k++) {
-                for (int l = 0; l < 3; l++) {
-                    matricePlateau[i][j].matrice[k][l] = tableauCarte[nbAlea].matrice[k][l];
+                for (int k = 0; k < 3; k++) {
+                    for (int l = 0; l < 3; l++) {
+                        matricePlateau[i][j].matrice[k][l] = tableauCarte[liste_12[m]].matrice[k][l];
+                    }
                 }
-            }
+            m += 1;
         }
     }
-
     for (int i = 1; i < 7; i += 2) {
         for (int j = 0; j < 7; j += 1) {
-            do {
-                nbAlea = rand() % 10;
-            } while (liste[nbAlea] == -1);
-            comptage_carte(nbAlea, &nbCarteL, &nbCarteI, &nbCarteT, liste);
             for (int k = 0; k < 3; k++) {
                 for (int l = 0; l < 3; l++) {
-                    matricePlateau[i][j].matrice[k][l] = tableauCarte[nbAlea].matrice[k][l];
+                    matricePlateau[i][j].matrice[k][l] = tableauCarte[liste_22[n]].matrice[k][l];
                 }
             }
-        }
-    }
-
-    if(nbCarteL < 16){
-        for (int j = 0; j < 3; j++) {
-            for (int k = 0; k < 3; k++) {
-                tableauCarte[2].matrice[j][k] = matriceCarteEnRab[j][k];
-            }
-        }
-    }
-    if(nbCarteI < 12){
-        for (int j = 0; j < 3; j++) {
-            for (int k = 0; k < 3; k++) {
-                tableauCarte[0].matrice[j][k] = matriceCarteEnRab[j][k];
-            }
-        }
-    }
-    if(nbCarteT < 6){
-        for (int j = 0; j < 3; j++) {
-            for (int k = 0; k < 3; k++) {
-                tableauCarte[6].matrice[j][k] = matriceCarteEnRab[j][k];
-            }
+            n += 1;
         }
     }
 }
 
 /////////////////////////////////////////////////AFFICHAGE//////////////////////////////////////////////////////////////
-
-int comptage_carte(int nbAlea, int *nbCarteL, int *nbCarteI, int *nbCarteT, int liste[]) {
-    if ((liste[nbAlea] <= 5) && (liste[nbAlea] >= 2) && (*nbCarteL < 16)){
-        *nbCarteL += 1;
-    }
-    if ((liste[nbAlea] <= 5) && (liste[nbAlea] >= 2) && (*nbCarteL == 16)){
-        for (int i=2; i<6; i++){
-            liste[i] = -1;
-        }
-    }
-    if (((liste[nbAlea] == 0) || (liste[nbAlea] == 1)) && (*nbCarteI < 12)){
-        *nbCarteI += 1;
-    }
-    if (((liste[nbAlea] == 0) || (liste[nbAlea] == 1)) && (*nbCarteI == 12)){
-        liste[0] = -1;
-        liste[1] = -1;
-    }
-    if ((liste[nbAlea] <= 9) && (liste[nbAlea] >= 6) && (*nbCarteT < 6)){
-        *nbCarteT += 1;
-    }
-    if ((liste[nbAlea] <= 9) && (liste[nbAlea] >= 6) && (*nbCarteT == 6)){
-        for (int i=6; i<10; i++){
-            liste[i] = -1;
-        }
-    }
-}
 
 void mise_en_forme(){
     int positionEnX = 0, positionEnY = 2;
@@ -578,6 +583,59 @@ int decalage(t_plateau matricePlateau[][7], int matriceCarteEnRab[][3]){
     affichage_matrice(matricePlateau);
 }
 
+
+void rotationCarteEnRab(t_plateau matricePlateau[][7], t_plateau tableauCarte[], int matriceCarteEnRab[3][3]){
+    char reponseBinaire;
+    set_color(WHITE, BLACK);
+    printf("\nVoulez-vous tourné votre carte ? (o = oui // n = non)\n");
+    while (1) {
+        scanf("%c", &reponseBinaire);
+        if (reponseBinaire == 'O' || reponseBinaire == 'o' || reponseBinaire == 'N' || reponseBinaire == 'n') {
+            break; // sortie de la boucle
+        }
+        while (getchar() != '\n'); // vide le tampon
+        printf("Reessayez :\n");
+    }
+
+    if (reponseBinaire == 'O' || reponseBinaire == 'o'){
+        char rotation;
+        set_color(WHITE, BLACK);
+        printf("\nDans quel sens voulez vous tourner votre carte : (g = gauche // d = droite)\n");
+        while (1) {
+            scanf("%c", &rotation);
+            if (rotation == 'G' || rotation == 'g' || reponseBinaire == 'D' || reponseBinaire == 'd') {
+                break; // sortie de la boucle
+            }
+            while (getchar() != '\n'); // vide le tampon
+            printf("Reessayez :\n");
+        }
+    if (rotation == 'G' || rotation == 'g'){
+        for (int j = 0; j < 3; j++) {
+            for (int k = 0; k < 3; k++) {
+                //matriceCarteEnRab[j][k] = tableauCarte[];
+            }
+        }
+
+    }
+
+
+    if (rotation == 'D' || rotation == 'd'){
+
+
+    }
+
+
+    }
+
+    if (reponseBinaire == 'O' || reponseBinaire == 'o'){
+
+    }
+
+    system("cls");
+    mise_en_forme();
+    affichage_matrice(matricePlateau);
+}
+
 ////////////////////////////////////////////////ENREGISTREMENT MATRICE//////////////////////////////////////////////////
 
 void enregistrement_matrice(t_plateau matricePlateau[7][7]){
@@ -655,7 +713,6 @@ void menu(t_plateau matricePlateau[][7], t_plateau tableauCarte[], FILE *fp, t_j
     system("cls");
     int choixMenu = 0;
     char entrer;
-    carte(tableauCarte);
     set_color(CYAN, BLACK);
     swag();
     printf("\n\t\t\tBienvenu(e) dans le jeu du Labyrinthe ! Voici le menu :\n\t\t\t\t\t1 - Nouvelle partie\n\t\t\t\t\t2 - Charger une partie\n\t\t\t\t\t3 - Les regles du jeu\n\t\t\t\t\t4 - Quitter\n");
@@ -670,9 +727,7 @@ void menu(t_plateau matricePlateau[][7], t_plateau tableauCarte[], FILE *fp, t_j
             TousLesJoueurs[1].xcoord = 44;TousLesJoueurs[1].ycoord=4;
             TousLesJoueurs[2].xcoord = 8;TousLesJoueurs[2].ycoord=22;
             TousLesJoueurs[3].xcoord = 44;TousLesJoueurs[3].ycoord=22;
-            plateau_cartes_fixes(matricePlateau, tableauCarte);
-            plateau_toutes_carte(matricePlateau, tableauCarte);
-            jeu_nouvelle_partie(TousLesJoueurs, matricePlateau);
+            jeu_nouvelle_partie(TousLesJoueurs, matricePlateau,tableauCarte);
             break;
         case 2:
             lecture_matrice_fichier(fp, matricePlateau);
@@ -725,10 +780,12 @@ void menu(t_plateau matricePlateau[][7], t_plateau tableauCarte[], FILE *fp, t_j
 }
 
 
-void jeu_nouvelle_partie(t_joueurs TousLesJoueurs[], t_plateau matricePlateau[7][7]){
+void jeu_nouvelle_partie(t_joueurs TousLesJoueurs[], t_plateau matricePlateau[7][7], t_plateau tableauCarte[]){
     int nbJoueur;
     int matriceCarteEnRab[3][3] = {0};
-    matriceCarteEnRab[1][1] = 1;
+    carte(tableauCarte);
+    plateau_cartes_fixes(matricePlateau, tableauCarte);
+    plateau_toutes_carte(matricePlateau, tableauCarte, matriceCarteEnRab);
     system("cls");
     swag();
     printf("\nVeuillez entrer le nombre de joueur :\n");
@@ -760,6 +817,7 @@ void jeu_nouvelle_partie(t_joueurs TousLesJoueurs[], t_plateau matricePlateau[7]
             for (int j=0; j<24/nbJoueur; j++){
                 printf("%c ", TousLesJoueurs[i].carteTresorsaChercher[j]);
             }
+            rotationCarteEnRab(matricePlateau, tableauCarte,matriceCarteEnRab);
             decalage(matricePlateau,matriceCarteEnRab);
             afficher_joueur(TousLesJoueurs,matricePlateau,nbJoueur);
             deplacement_jouer(TousLesJoueurs,matricePlateau,i);

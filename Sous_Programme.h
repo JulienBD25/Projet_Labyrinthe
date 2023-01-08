@@ -5,6 +5,11 @@
 #ifndef PROJET_ALGORITHMIQUE_LABYRINTHE_SOUS_PROGRAMME_H
 #define PROJET_ALGORITHMIQUE_LABYRINTHE_SOUS_PROGRAMME_H
 
+#define SIZE1 12
+#define SIZE2 16
+#define SIZE3 6
+#define NEW_SIZE (SIZE1 + SIZE2 + SIZE3)
+
 #include <stdlib.h>
 #include <stdio.h>
 #include <time.h>
@@ -45,8 +50,9 @@ typedef struct t_joueurs{
 
 //sous programmes plateau
 void plateau_cartes_fixes(t_plateau matricePlateau[7][7], t_plateau tableauCarte[10]);
-void plateau_toutes_carte(t_plateau matricePlateau[][7], t_plateau tableauCarte[],int matriceCarteEnRab[][3]);
+void plateau_toutes_carte(t_plateau matricePlateau[][7], t_plateau tableauCarte[],int matriceCarteEnRab[3][3]);
 int decalage(t_plateau matricePlateau[][7],int matriceCarteEnRab[][3]);
+void rotationCarteEnRab(t_plateau matricePlateau[][7], t_plateau tableauCarte[], int matriceCarteEnRab[3][3]);
 
 
 //affichage
@@ -65,9 +71,8 @@ void enregistrement_matrice(t_plateau matricePlateau[][7]);
 void lecture_matrice_fichier(FILE *fp, t_plateau matricePlateau[7][7]);
 
 
-int comptage_carte(int nbAlea, int *nbCarteL, int *nbCarteI, int *nbCarteT, int liste[]);
 void menu(t_plateau matricePlateau[][7], t_plateau tableauCarte[], FILE *fp, t_joueurs TousLesJoueurs[]);
-void jeu_nouvelle_partie(t_joueurs TousLesJoueurs[], t_plateau matricePlateau[][7]);
+void jeu_nouvelle_partie(t_joueurs TousLesJoueurs[], t_plateau matricePlateau[7][7],t_plateau tableauCarte[]);
 void deplacement_jouer(t_joueurs TousLesJoueurs[], t_plateau matricePlateau[][7], int i);
 void afficher_joueur(t_joueurs TousLesJoueurs[], t_plateau matricePlateau[][7], int nbJoueur);
 
