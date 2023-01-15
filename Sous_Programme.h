@@ -5,16 +5,16 @@
 #ifndef PROJET_ALGORITHMIQUE_LABYRINTHE_SOUS_PROGRAMME_H
 #define PROJET_ALGORITHMIQUE_LABYRINTHE_SOUS_PROGRAMME_H
 
-#define SIZE1 12
-#define SIZE2 16
-#define SIZE3 6
-#define NEW_SIZE (SIZE1 + SIZE2 + SIZE3)
-
 #include <stdlib.h>
 #include <stdio.h>
 #include <time.h>
 #include <windows.h>
 #include <conio.h>
+
+#define SIZE1 12
+#define SIZE2 16
+#define SIZE3 6
+#define NEW_SIZE (SIZE1 + SIZE2 + SIZE3)
 
 typedef enum{
     BLACK,
@@ -50,9 +50,10 @@ typedef struct t_joueurs{
 
 //sous programmes plateau
 void plateau_cartes_fixes(t_plateau matricePlateau[7][7], t_plateau tableauCarte[10]);
-void plateau_toutes_carte(t_plateau matricePlateau[][7], t_plateau tableauCarte[],int matriceCarteEnRab[3][3]);
-int decalage(t_plateau matricePlateau[][7],int matriceCarteEnRab[][3]);
-void rotationCarteEnRab(t_plateau matricePlateau[][7], t_plateau tableauCarte[], int matriceCarteEnRab[3][3]);
+void plateau_toutes_carte(t_plateau matricePlateau[][7], t_plateau tableauCarte[],int matriceCarteEnRab[3][3],int *numMatriceEnRab);
+int decalage(t_plateau matricePlateau[][7], int matriceCarteEnRab[][3], t_joueurs TousLesJoueurs[], int nbJoueur, FILE *fichierTresors);
+void rotationCarteEnRab(t_plateau matricePlateau[][7], t_plateau tableauCarte[], int matriceCarteEnRab[3][3], int numMatriceEnRab);
+void pause(t_plateau matricePlateau[][7], t_plateau tableauCarte[], FILE *fp, t_joueurs TousLesJoueurs[], char liste_tresor[], FILE *fichierTresors);
 
 
 //affichage
@@ -71,9 +72,13 @@ void enregistrement_matrice(t_plateau matricePlateau[][7]);
 void lecture_matrice_fichier(FILE *fp, t_plateau matricePlateau[7][7]);
 
 
-void menu(t_plateau matricePlateau[][7], t_plateau tableauCarte[], FILE *fp, t_joueurs TousLesJoueurs[]);
-void jeu_nouvelle_partie(t_joueurs TousLesJoueurs[], t_plateau matricePlateau[7][7],t_plateau tableauCarte[]);
-void deplacement_jouer(t_joueurs TousLesJoueurs[], t_plateau matricePlateau[][7], int i);
+void menu(t_plateau matricePlateau[][7], t_plateau tableauCarte[], FILE *fp, t_joueurs TousLesJoueurs[],FILE *fichierTresors);
+void jeu_nouvelle_partie(t_joueurs TousLesJoueurs[], t_plateau matricePlateau[][7], t_plateau tableauCarte[],FILE *fichierTresors);
+void deplacement_jouer(t_joueurs TousLesJoueurs[], t_plateau matricePlateau[][7], int i,int nbJoueur,int numeroTresor,FILE *fichierTresors);
 void afficher_joueur(t_joueurs TousLesJoueurs[], t_plateau matricePlateau[][7], int nbJoueur);
+void affichage_tresor(FILE *fichierTresors);
+void generation_tresor();
+void recuperation_tresor(FILE *fichierTresors, t_joueurs TousLesJoueurs[],int nbJoueur, int *numeroTresor,int i);
+void distribution_tresor(int nbJoueur, t_joueurs TousLesJoueurs[], char liste_tresor[]);
 
 #endif //PROJET_ALGORITHMIQUE_LABYRINTHE_SOUS_PROGRAMME_H
